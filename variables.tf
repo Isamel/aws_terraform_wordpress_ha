@@ -1,3 +1,8 @@
+variable "region" {
+    type        = string
+    description = "region."
+}
+
 variable "enabled" {
     type        = bool
     default     = true
@@ -6,6 +11,7 @@ variable "enabled" {
 
 variable "route53_zone_depends_on" {
     type        = list(string)
+    default     = []
     description = "route53 zone depends on."
 }
 
