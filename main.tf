@@ -8,7 +8,7 @@ module "route53_zone_terraform" {
 }
 
 module "security_group_terraform" {
-    source = "git@github.com:Isamel/aws_terraform_route53_zone.git"
+    source = "git@github.com:Isamel/aws_terraform_security_group.git"
     
     security_group_count      = var.enabled
     security_group_depends_on = var.security_group_depends_on
