@@ -1,0 +1,23 @@
+---
+  - hosts: 172.0.0.1
+    become: yes
+    become_user: root
+    become_method: sudo
+
+    vars:
+          system_user: ec2-user
+
+          packages:
+          - git
+          - unzip
+
+          tmp_dir: '/home/{{ system_user }}'
+
+    gather_facts: no
+
+    tasks:
+    - name ensure a list of yum packages are installed
+      yum:
+        name: '{{ packages }}'
+        state: latest
+        update_cache: yes
