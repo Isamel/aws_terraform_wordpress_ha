@@ -1,0 +1,16 @@
+{
+    "region": "us-east-1",
+    "vpc_id": "vpc-01f5b3b797f98e6ce",
+    "subnet_id": "subnet-004aa982db90def33",
+    "source_ami": "ami-098f16afa9edf40be",
+    "ami_prefix": "packer-redhat7-wordpress",
+    "ami_description": "worpress base on redhat7 ami-098f16afa9edf40be",
+    "instance_type": "t2.medium",
+    "ssh_username": "ec2-user",
+    "encrypt_boot": "true",
+    "kms_key_id": "",
+    "device_name": "/dev/sda1",
+    "volume_size": 50,
+    "volume_type": "gp2",
+    "delete_on_termination": true
+}

@@ -1,0 +1,56 @@
+{
+    "builders": [
+        {
+            "region": "{{user `region`}}",
+            "vpc_id": "{{user `vpc_id`}}",
+            "subnet_id": "{{user `subnet_id`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "ami_name": "{{user `ami_prefix`}}-{{isotime | clean_resource_name}}",
+            "ami_description": "{{user `ami_description`}}",
+            "instance_type": "{{user `instance_type`}}",
+            "ssh_username": "{{user `ssh_username`}}",
+            "encrypt_boot": "{{user `encrypt_boot`}}",
+            "kms_key_id": "{{user `kms_key_id`}}",
+            "type": "amazon-ebs",
+            "ami_block_device_mappings": [
+                {
+                    "device_name": "{{user `device_name`}}",
+                    "volume_size":"{{user `volume_size`}}",
+                    "volume_type": "{{user `volume_type`}}",
+                    "delete_on_termination": "{{user `delete_on_termination`}}"
+                }
+            ],
+            "launch_block_device_mappings": [
+                {
+                    "device_name": "{{user `device_name`}}",
+                    "volume_size":"{{user `volume_size`}}",
+                    "volume_type": "{{user `volume_type`}}",
+                    "encrypted": "{{user `encrypt_boot`}}",
+                    "kms_key_id": "{{user `kms_key_id`}}",
+                    "delete_on_termination": "{{user `delete_on_termination`}}"
+                }
+            ],
+            "run_tags": {
+                "Name": "packer-redhat-wordpress"
+            },
+            "tags": {
+                "Tool": "Packer",
+                "Tools": "Ansible, WordPress"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "inline": [
+                "sudo yum clean all",
+                "sudo yum update -y",
+                "sudo yum install -y ansible"
+            ],
+            "type": "shell"
+        },
+        {
+            "playboot_file": "playbook.yml",
+            "type": "ansible-local"
+        }
+    ]
+}
