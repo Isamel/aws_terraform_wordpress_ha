@@ -80,6 +80,46 @@ variable "alb_idle_enable_cross_zone_load_balancing" {
     description = "alb idle enable cross zone load balancing."
 }
 
+variable "alb_listener_port" {
+    type        = number
+    description = "alb listener port."
+}
+
+variable "alb_internalb_listener_protocolal" {
+    type        = string
+    description = "alb listener protocol."
+}
+
+variable "alb_listener_ssl_policy" {
+    type        = string
+    description = "alb listener ssl policy."
+}
+
+variable "alb_listener_certificate_arn" {
+    type        = string
+    description = "alb listener certificate arn."
+}
+
+variable "alb_listener_default_action_type" {
+    type        = string
+    description = "alb listener default action type."
+}
+
+variable "alb_listener_default_action_fixed_response_content_type" {
+    type        = string
+    description = "alb listener default action fixed response content type."
+}
+
+variable "alb_listener_default_action_fixed_response_message_body" {
+    type        = string
+    description = "alb listener default action fixed response message body."
+}
+
+variable "alb_listener_default_action_fixed_response_status_code" {
+    type        = number
+    description = "alb listener default action fixed response status code."
+}
+
 variable "extra_tags" {
     type        = map(string)
     description = "extra tags."

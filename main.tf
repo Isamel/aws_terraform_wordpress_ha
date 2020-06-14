@@ -41,3 +41,19 @@ module "alb_terraform" {
     alb_idle_enable_cross_zone_load_balancing = var.alb_idle_enable_cross_zone_load_balancing
     extra_tags                                = local.tags
 }
+
+module "alb_listener_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_load_balancer_listener.git"
+    
+    alb_listener_count                                      = var.enabled ? 1 : 0
+    alb_listener_depends_on                                 = [join("", module.alb_terraform.alb_listener.*.arn)]
+    alb_listener_load_balancer_arn                          = join("", module.alb_terraform.alb_listener.*.arn)
+    alb_listener_port                                       = var.alb_listener_port
+    alb_listener_protocol                                   = var.alb_listener_protocol
+    alb_listener_ssl_policy                                 = var.alb_listener_ssl_policy
+    alb_listener_certificate_arn                            = var.alb_listener_certificate_arn
+    alb_listener_default_action_type                        = var.alb_listener_default_action_type
+    alb_listener_default_action_fixed_response_content_type = var.alb_listener_default_action_fixed_response_content_type
+    alb_listener_default_action_fixed_response_message_body = var.alb_listener_default_action_fixed_response_message_body
+    alb_listener_default_action_fixed_response_status_code  = var.alb_listener_default_action_fixed_response_status_code
+}
