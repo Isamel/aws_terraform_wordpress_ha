@@ -31,17 +31,9 @@
         state: latest
         update_cache: yes
 
-    - name: download wordpress
-      get_url:
-        url: '{{ wordpress_url }}'
-        dest: '{{ tmp_dir }}'
-        owner: '{{ system_user }}'
-        group: '{{ system_user }}'
-        mode: '0755'
-
     - name: extract wordpress
       unarchive:
-        src: '{{ tmp_dir }}/latest.tar.gz'
+        src: '{{ wordpress_url }}'
         dest: '{{ http_path }}'
         remote_src: yes
         owner: '{{ http_user }}'
