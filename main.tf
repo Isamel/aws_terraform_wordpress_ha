@@ -1,17 +1,22 @@
+###
+###Modulo para crear el nombre del dominio base
 module "route53_zone_terraform" {
     source = "git@github.com:Isamel/aws_terraform_route53_zone.git"
     
     route53_zone_count      = var.enabled  ? 1 : 0
-    route53_zone_depends_on = var.route53_zone_depends_on
+    route53_zone_depends_on = [""]
     route53_zone_name       = var.route53_zone_name
     extra_tags              = local.tags
 }
 
+###
+### Modulo para crear el grupo de seguridad para el ALB
+### este ALB utiliza el puerto 80 para comunicarse con internet
 module "security_group_terraform" {
     source = "git@github.com:Isamel/aws_terraform_security_group.git"
     
     security_group_count      = var.enabled  ? 1 : 0
-    security_group_depends_on = var.security_group_depends_on
+    security_group_depends_on = [""]
     security_group_name       = var.security_group_name
     security_group_vpc_id     = var.security_group_vpc_id
     security_group_ingress    = var.security_group_ingress
@@ -19,10 +24,14 @@ module "security_group_terraform" {
     extra_tags                = local.tags
 }
 
+###
+###Se obtiene las redes disponibles en la cuenta
 data "aws_subnet_ids" "subnet_ids_terraform" {
     vpc_id = var.vpc_id
 }
 
+###
+###Modulo para crear el ALB, que se utilizara para realizar el balanceo de sito en las dos zonas
 module "alb_terraform" {
     source = "git@github.com:Isamel/aws_terraform_application_load_balancer.git"
     
@@ -36,12 +45,17 @@ module "alb_terraform" {
     alb_idle_timeout                          = var.alb_idle_timeout
     alb_idle_load_balancer_type               = var.alb_idle_load_balancer_type
     alb_idle_security_groups                  = [join("", module.security_group_terraform.security_group.*.id)]
-    alb_idle_subnets                          = [data.aws_subnet_ids.subnet_ids_terraform[0], data.aws_subnet_ids.subnet_ids_terraform[1],]
+    alb_idle_subnets                          = [
+        data.aws_subnet_ids.subnet_ids_terraform[0], 
+        data.aws_subnet_ids.subnet_ids_terraform[1]
+    ]
     alb_idle_enable_deletion_protection       = var.alb_idle_enable_deletion_protection
     alb_idle_enable_cross_zone_load_balancing = var.alb_idle_enable_cross_zone_load_balancing
     extra_tags                                = local.tags
 }
 
+###
+###Modulo para crear el listener para el puerto 80 y la respuesta por defecto
 module "alb_listener_terraform" {
     source = "git@github.com:Isamel/aws_terraform_load_balancer_listener.git"
     
@@ -58,6 +72,8 @@ module "alb_listener_terraform" {
     alb_listener_default_action_fixed_response_status_code  = var.alb_listener_default_action_fixed_response_status_code
 }
 
+###
+### Modulo para crea un target para enlazar las vm y el ALB
 module "alb_target_group_terraform" {
     source = "git@github.com:Isamel/aws_terraform_target_group.git"
     
@@ -77,24 +93,8 @@ module "alb_target_group_terraform" {
     alb_target_group_health_check_matcher             = var.alb_target_group_health_check_matcher
 }
 
-module "alb_listener_rule_terraform" {
-    source = "git@github.com:Isamel/aws_terraform_load_balancer_listener_rule.git"
-    
-    alb_listener_rule_count                       = var.enabled ? 1 : 0
-    alb_listener_rule_depends_on                  = [
-        join("", module.alb_listener_terraform.alb_listener.*.arn), 
-        join("", module.alb_target_group_terraform.alb_target_group.*.arn)
-    ]
-    alb_listener_rule_listener_arn                = join("", module.alb_listener_terraform.alb_listener.*.arn)
-    alb_listener_rule_condition_field             = var.alb_listener_rule_condition_field
-    alb_listener_rule_condition_values            = var.alb_listener_rule_condition_values
-    alb_listener_rule_action_type                 = var.alb_listener_rule_action_type
-    alb_listener_rule_action_redirect_port        = var.alb_listener_rule_action_redirect_port
-    alb_listener_rule_action_redirect_protocol    = var.alb_listener_rule_action_redirect_protocol
-    alb_listener_rule_action_redirect_status_code = var.alb_listener_rule_action_redirect_status_code
-    alb_listener_rule_action_target_group_arn     = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
-}
-
+###
+### Modulo para crear un alias al ALB
 module "route53_record_terraform" {
     source = "git@github.com:Isamel/aws_terraform_route53_record.git"
     
@@ -106,12 +106,14 @@ module "route53_record_terraform" {
     route53_record_zone_id                      = join("", module.route53_zone_terraform.route53_zone.*.zone_id)
     route53_record_name                         = var.route53_record_name
     route53_record_type                         = var.route53_record_type
-    route53_record_alias_name                   = var.route53_record_alias_name
+    route53_record_alias_name                   = join("", module.alb_terraform.alb.*.dns_name)
     route53_record_alias_zone_id                = join("", module.alb_terraform.alb.*.zone_id)
     route53_record_alias_evaluate_target_health = var.route53_record_alias_evaluate_target_health
     extra_tags                                  = local.tags
 }
 
+###
+### Modulo para crear el template que tilizara el grupo de auto escala
 module "launch_template_group_terraform" {
     source = "git@github.com:Isamel/aws_terraform_launch_template.git"
     
@@ -123,6 +125,7 @@ module "launch_template_group_terraform" {
     extra_tags                                  = local.tags
 }
 
+### se obtien el nombre de las zonas
 data "aws_availability_zones" "availability_zones_terraform" {
   state = "available"
 }

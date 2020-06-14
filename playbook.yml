@@ -31,6 +31,19 @@
         state: latest
         update_cache: yes
 
+    - name: copy virtualhost file
+      copy:
+        src: /tmp/httpd.conf
+        dest: /etc/httpd/conf/httpd.conf
+        owner: '{{ http_user }}'
+        group: '{{ http_user }}'
+        mode: '0755'
+
+    - name: restart httpd
+      service:
+        name: httpd
+        state: restarted
+
     - name: extract wordpress
       unarchive:
         src: '{{ wordpress_url }}'

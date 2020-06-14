@@ -50,6 +50,11 @@
             "type": "shell"
         },
         {
+            "source": "httpd.conf",
+            "destination": "/tmp/",
+            "type": "file"
+        },
+        {
             "playbook_file": "playbook.yml",
             "type": "ansible-local"
         }
