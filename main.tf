@@ -111,3 +111,14 @@ module "route53_record_terraform" {
     route53_record_alias_evaluate_target_health = var.route53_record_alias_evaluate_target_health
     extra_tags                                  = local.tags
 }
+
+module "launch_template_group_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_launch_template.git"
+    
+    launch_template_count                        = var.enabled ? 1 : 0
+    launch_template_depends_on                   = [""]
+    launch_template_name_prefix                 = var.launch_template_name_prefix
+    launch_template_image_id                    = var.launch_template_image_id
+    launch_template_instance_type               = var.launch_template_instance_type
+    extra_tags                                  = local.tags
+}
