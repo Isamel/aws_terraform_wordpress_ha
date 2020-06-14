@@ -1,6 +1,8 @@
 {
     "builders": [
         {
+            "access_key": "{{user `access_key`}}",
+            "secret_key": "{{user `secret_key`}}",
             "region": "{{user `region`}}",
             "vpc_id": "{{user `vpc_id`}}",
             "subnet_id": "{{user `subnet_id`}}",

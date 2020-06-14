@@ -1,7 +1,9 @@
 {
+    "access_key": "",
+    "secret_key": "",
     "region": "us-east-1",
-    "vpc_id": "vpc-01f5b3b797f98e6ce",
-    "subnet_id": "subnet-004aa982db90def33",
+    "vpc_id": "vpc-024414cd4f4d5377b",
+    "subnet_id": "subnet-0c127cc793bdb359f",
     "source_ami": "ami-098f16afa9edf40be",
     "ami_prefix": "packer-redhat7-wordpress",
     "ami_description": "worpress base on redhat7 ami-098f16afa9edf40be",
