@@ -145,3 +145,15 @@ module "autoscaling_group_terraform" {
     autoscaling_group_launch_template_version = var.autoscaling_group_launch_template_version
     extra_tags                                = local.tags
 }
+
+module "autoscaling_attachment_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_autoscaling_attachment.git"
+    
+    autoscaling_attachment_count                  = var.enabled ? 1 : 0
+    autoscaling_attachment_depends_on             = [
+        join("", module.autoscaling_group_terraform.autoscaling_group.*.id),
+        join("", module.alb_target_group_terraform.alb_target_group.*.arn)
+    ]
+    autoscaling_attachment_autoscaling_group_name = join("", module.autoscaling_group_terraform.autoscaling_group.*.id)
+    autoscaling_attachment_alb_target_group_arn   = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
+}
