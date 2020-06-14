@@ -205,6 +205,31 @@ variable "alb_target_group_health_check_matcher" {
     description = "alb target group health check matcher."
 }
 
+variable "route53_record_zone_id" {
+    type        = string
+    description = "route53 record zone id."
+}
+
+variable "route53_record_name" {
+    type        = string
+    description = "route53 record name."
+}
+
+variable "route53_record_type" {
+    type        = string
+    description = "route53 record type."
+}
+
+variable "route53_record_alias_name" {
+    type        = string
+    description = "route53 record alias name."
+}
+
+variable "route53_record_alias_evaluate_target_health" {
+    type        = string
+    description = "route53 record alias evaluate target health."
+}
+
 variable "extra_tags" {
     type        = map(string)
     description = "extra tags."

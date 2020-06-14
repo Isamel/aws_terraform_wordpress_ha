@@ -81,7 +81,10 @@ module "alb_listener_rule_terraform" {
     source = "git@github.com:Isamel/aws_terraform_load_balancer_listener_rule.git"
     
     alb_listener_rule_count                       = var.enabled ? 1 : 0
-    alb_listener_rule_depends_on                  = [join("", module.alb_listener_terraform.alb_listener.*.arn), join("", module.alb_target_group_terraform.alb_target_group.*.arn)]
+    alb_listener_rule_depends_on                  = [
+        join("", module.alb_listener_terraform.alb_listener.*.arn), 
+        join("", module.alb_target_group_terraform.alb_target_group.*.arn)
+    ]
     alb_listener_rule_listener_arn                = join("", module.alb_listener_terraform.alb_listener.*.arn)
     alb_listener_rule_condition_field             = var.alb_listener_rule_condition_field
     alb_listener_rule_condition_values            = var.alb_listener_rule_condition_values
