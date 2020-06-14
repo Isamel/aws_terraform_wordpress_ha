@@ -29,6 +29,12 @@
         state: latest
         update_cache: yes
 
+    - firewalld:
+        port: 8000/tcp
+        permanent: yes
+        state: enabled
+      
+
     - name: download wordpress
       get_url:
         url: '{{ wordpress_url }}'
