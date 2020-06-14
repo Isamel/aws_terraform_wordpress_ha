@@ -150,6 +150,61 @@ variable "alb_listener_rule_action_redirect_status_code" {
     description = "alb listener rule action redirect status code."
 }
 
+variable "alb_target_group_name" {
+    type        = string
+    description = "alb target group name."
+}
+
+variable "alb_target_group_port" {
+    type        = number
+    description = "alb target group port."
+}
+
+variable "alb_target_group_protocol" {
+    type        = string
+    description = "alb target group protocol."
+}
+
+variable "alb_target_group_stickiness_type" {
+    type        = string
+    description = "alb target group stickiness type."
+}
+
+variable "alb_target_group_stickiness_cookie_duration" {
+    type        = number
+    description = "alb target group stickiness cookie duration."
+}
+
+variable "alb_target_group_health_check_path" {
+    type        = string
+    description = "alb target group health check path."
+}
+
+variable "alb_target_group_health_check_healthy_threshold" {
+    type        = number
+    description = "alb target group health check healthy threshold."
+}
+
+variable "alb_target_group_health_check_unhealthy_threshold" {
+    type        = number
+    description = "alb target group health check unhealthy threshold."
+}
+
+variable "alb_target_group_health_check_timeout" {
+    type        = number
+    description = "alb target group health check timeout."
+}
+
+variable "alb_target_group_health_check_interval" {
+    type        = number
+    description = "alb target group health check interval."
+}
+
+variable "alb_target_group_health_check_matcher" {
+    type        = string
+    description = "alb target group health check matcher."
+}
+
 variable "extra_tags" {
     type        = map(string)
     description = "extra tags."

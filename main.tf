@@ -58,11 +58,30 @@ module "alb_listener_terraform" {
     alb_listener_default_action_fixed_response_status_code  = var.alb_listener_default_action_fixed_response_status_code
 }
 
+module "alb_target_group_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_target_group.git"
+    
+    alb_target_group_count                            = var.enabled ? 1 : 0
+    alb_target_group_depends_on                       = [join("", module.alb_terraform.alb.*.arn)]
+    alb_target_group_name                             = var.alb_target_group_name
+    alb_target_group_port                             = var.alb_target_group_port
+    alb_target_group_protocol                         = var.alb_target_group_protocol
+    alb_target_group_vpc_id                           = var.alb_target_group_vpc_id
+    alb_target_group_stickiness_type                  = var.alb_target_group_stickiness_type
+    alb_target_group_stickiness_cookie_duration       = var.alb_target_group_stickiness_cookie_duration
+    alb_target_group_health_check_path                = var.alb_target_group_health_check_path
+    alb_target_group_health_check_healthy_threshold   = var.alb_target_group_health_check_healthy_threshold
+    alb_target_group_health_check_unhealthy_threshold = var.alb_target_group_health_check_unhealthy_threshold
+    alb_target_group_health_check_timeout             = var.alb_target_group_health_check_timeout
+    alb_target_group_health_check_interval            = var.alb_target_group_health_check_interval
+    alb_target_group_health_check_matcher             = var.alb_target_group_health_check_matcher
+}
+
 module "alb_listener_rule_terraform" {
     source = "git@github.com:Isamel/aws_terraform_load_balancer_listener_rule.git"
     
     alb_listener_rule_count                       = var.enabled ? 1 : 0
-    alb_listener_rule_depends_on                  = [join("", module.alb_listener_terraform.alb_listener.*.arn)]
+    alb_listener_rule_depends_on                  = [join("", module.alb_listener_terraform.alb_listener.*.arn), join("", module.alb_target_group_terraform.alb_target_group.*.arn)]
     alb_listener_rule_listener_arn                = join("", module.alb_listener_terraform.alb_listener.*.arn)
     alb_listener_rule_condition_field             = var.alb_listener_rule_condition_field
     alb_listener_rule_condition_values            = var.alb_listener_rule_condition_values
@@ -70,5 +89,5 @@ module "alb_listener_rule_terraform" {
     alb_listener_rule_action_redirect_port        = var.alb_listener_rule_action_redirect_port
     alb_listener_rule_action_redirect_protocol    = var.alb_listener_rule_action_redirect_protocol
     alb_listener_rule_action_redirect_status_code = var.alb_listener_rule_action_redirect_status_code
-    alb_listener_rule_action_target_group_arn     = 
+    alb_listener_rule_action_target_group_arn     = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
 }
