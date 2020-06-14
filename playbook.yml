@@ -1,5 +1,5 @@
 ---
-  - hosts: 172.0.0.1
+  - hosts: all
     become: yes
     become_user: root
     become_method: sudo
