@@ -10,7 +10,6 @@
             "instance_type": "{{user `instance_type`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "encrypt_boot": "{{user `encrypt_boot`}}",
-            "kms_key_id": "{{user `kms_key_id`}}",
             "type": "amazon-ebs",
             "ami_block_device_mappings": [
                 {
@@ -26,7 +25,6 @@
                     "volume_size":"{{user `volume_size`}}",
                     "volume_type": "{{user `volume_type`}}",
                     "encrypted": "{{user `encrypt_boot`}}",
-                    "kms_key_id": "{{user `kms_key_id`}}",
                     "delete_on_termination": "{{user `delete_on_termination`}}"
                 }
             ],
