@@ -122,3 +122,26 @@ module "launch_template_group_terraform" {
     launch_template_instance_type               = var.launch_template_instance_type
     extra_tags                                  = local.tags
 }
+
+data "aws_availability_zones" "availability_zones_terraform" {
+  state = "available"
+}
+
+module "autoscaling_group_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_autoscaling_group.git"
+    
+    autoscaling_group_count                   = var.enabled ? 1 : 0
+    autoscaling_group_depends_on              = [
+        join("", module.launch_template_group_terraform.launch_template.*.id)
+    ]
+    autoscaling_group_availability_zones      = [
+        data.aws_availability_zones.availability_zones_terraform.names[0], 
+        data.aws_availability_zones.availability_zones_terraform.names[1]
+    ]
+    autoscaling_group_desired_capacity        = var.autoscaling_group_desired_capacity
+    autoscaling_group_max_size                = var.autoscaling_group_max_size
+    autoscaling_group_min_size                = var.autoscaling_group_min_size
+    autoscaling_group_launch_template_id      = join("", module.launch_template_group_terraform.launch_template.*.id)
+    autoscaling_group_launch_template_version = var.autoscaling_group_launch_template_version
+    extra_tags                                = local.tags
+}
