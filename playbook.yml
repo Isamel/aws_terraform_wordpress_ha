@@ -10,14 +10,37 @@
           packages:
           - git
           - unzip
+          - httpd
+          - php 
+          - php-mysql 
+          - php-gd
 
           tmp_dir: '/home/{{ system_user }}'
+          wordpress_url: 'http://wordpress.org/latest.tar.gz'
+          http_path: '/var/www/html/'
+          http_user: 'apache'
 
     gather_facts: no
 
     tasks:
-    - name ensure a list of yum packages are installed
+    - name: ensure a list of yum packages are installed
       yum:
         name: '{{ packages }}'
         state: latest
         update_cache: yes
+
+    - name: download wordpress
+      get_url:
+        url: '{{ wordpress_url }}'
+        dest: '{{ tmp_dir }}'
+        owner: '{{ system_user }}'
+        group: '{{ system_user }}'
+        mode: '0755'
+
+    - name: extract wordpress
+      unarchive:
+        src: '{{ tmp_dir }}/latest.tar.gz'
+        dest: '{{ http_path }}'
+        owner: '{{ http_user }}'
+        group: '{{ http_user }}'
+        mode: '0755'
