@@ -157,3 +157,22 @@ module "autoscaling_attachment_terraform" {
     autoscaling_attachment_autoscaling_group_name = join("", module.autoscaling_group_terraform.autoscaling_group.*.id)
     autoscaling_attachment_alb_target_group_arn   = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
 }
+
+module "db_instance_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_db_instance.git"
+    
+    db_instance_count                 = var.enabled ? 1 : 0
+    db_instance_depends_on            = [null_resource.depends_on]
+    db_instance_allocated_storage     = var.db_instance_allocated_storage
+    db_instance_max_allocated_storage = var.db_instance_max_allocated_storage
+    db_instance_storage_type          = var.db_instance_storage_type
+    db_instance_engine                = var.db_instance_engine
+    db_instance_engine_version        = var.db_instance_engine_version
+    db_instance_instance_class        = var.db_instance_instance_class
+    db_instance_name                  = var.db_instance_name
+    db_instance_username              = var.db_instance_username
+    db_instance_password              = var.db_instance_password
+    db_instance_parameter_group_name  = var.db_instance_parameter_group_name
+    db_instance_multi_az              = var.db_instance_multi_az
+    extra_tags                        = local.tags
+}
