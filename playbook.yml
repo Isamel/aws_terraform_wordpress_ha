@@ -43,6 +43,7 @@
       unarchive:
         src: '{{ tmp_dir }}/latest.tar.gz'
         dest: '{{ http_path }}'
+        remote_src: yes
         owner: '{{ http_user }}'
         group: '{{ http_user }}'
         mode: '0755'
