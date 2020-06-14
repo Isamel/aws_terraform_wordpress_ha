@@ -130,6 +130,9 @@ data "aws_availability_zones" "availability_zones_terraform" {
   state = "available"
 }
 
+###
+### Modulo para crear un grupo de auto escala, este esta configurado para crear dos instancias en dos zonas diferentes
+### y asi garantizar la alta disponibilidad
 module "autoscaling_group_terraform" {
     source = "git@github.com:Isamel/aws_terraform_autoscaling_group.git"
     
@@ -149,6 +152,8 @@ module "autoscaling_group_terraform" {
     extra_tags                                = local.tags
 }
 
+###
+### Modulo para atachear las instancias del grupo de auto escala al ALB
 module "autoscaling_attachment_terraform" {
     source = "git@github.com:Isamel/aws_terraform_autoscaling_attachment.git"
     
@@ -161,6 +166,9 @@ module "autoscaling_attachment_terraform" {
     autoscaling_attachment_alb_target_group_arn   = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
 }
 
+###
+### Modulo para crear un rds con mysql que esta configurado  para que utilize dos zonas quedando una de las instancias como
+### replica por si la instancia principal se cae, el cambio es automatico y como utiliza un LB regional no cambia la URL
 module "db_instance_terraform" {
     source = "git@github.com:Isamel/aws_terraform_db_instance.git"
     
