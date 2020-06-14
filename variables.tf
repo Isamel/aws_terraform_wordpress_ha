@@ -120,6 +120,36 @@ variable "alb_listener_default_action_fixed_response_status_code" {
     description = "alb listener default action fixed response status code."
 }
 
+variable "alb_listener_rule_condition_field" {
+    type        = string
+    description = "alb listener rule condition field."
+}
+
+variable "alb_listener_rule_condition_values" {
+    type        = list(string)
+    description = "alb listener rule condition values."
+}
+
+variable "alb_listener_rule_action_type" {
+    type        = string
+    description = "alb listener rule action type."
+}
+
+variable "alb_listener_rule_action_redirect_port" {
+    type        = number
+    description = "alb listener rule action redirect port."
+}
+
+variable "alb_listener_rule_action_redirect_protocol" {
+    type        = string
+    description = "alb listener rule action redirect protocol."
+}
+
+variable "alb_listener_rule_action_redirect_status_code" {
+    type        = string
+    description = "alb listener rule action redirect status code."
+}
+
 variable "extra_tags" {
     type        = map(string)
     description = "extra tags."
