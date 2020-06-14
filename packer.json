@@ -44,7 +44,8 @@
             "inline": [
                 "sudo yum clean all",
                 "sudo yum update -y",
-                "sudo yum install -y ansible"
+                "sudo dnf install -y python3-pip",
+                "pip3 install ansible --user"
             ],
             "type": "shell"
         },
