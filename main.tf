@@ -94,3 +94,20 @@ module "alb_listener_rule_terraform" {
     alb_listener_rule_action_redirect_status_code = var.alb_listener_rule_action_redirect_status_code
     alb_listener_rule_action_target_group_arn     = join("", module.alb_target_group_terraform.alb_target_group.*.arn)
 }
+
+module "route53_record_terraform" {
+    source = "git@github.com:Isamel/aws_terraform_route53_record.git"
+    
+    route53_record_count                        = var.enabled ? 1 : 0
+    route53_record_depends_on                   = [
+        join("", module.route53_zone_terraform.route53_zone.*.zone_id),
+        join("", module.alb_terraform.alb.*.zone_id)
+    ]
+    route53_record_zone_id                      = join("", module.route53_zone_terraform.route53_zone.*.zone_id)
+    route53_record_name                         = var.route53_record_name
+    route53_record_type                         = var.route53_record_type
+    route53_record_alias_name                   = var.route53_record_alias_name
+    route53_record_alias_zone_id                = join("", module.alb_terraform.alb.*.zone_id)
+    route53_record_alias_evaluate_target_health = var.route53_record_alias_evaluate_target_health
+    extra_tags                                  = local.tags
+}
