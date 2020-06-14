@@ -230,6 +230,21 @@ variable "route53_record_alias_evaluate_target_health" {
     description = "route53 record alias evaluate target health."
 }
 
+variable "launch_template_name_prefix" {
+    type        = string
+    description = "launch template name prefix."
+}
+
+variable "launch_template_image_id" {
+    type        = string
+    description = "launch template image id."
+}
+
+variable "launch_template_instance_type" {
+    type        = string
+    description = "launch template instance type."
+}
+
 variable "extra_tags" {
     type        = map(string)
     description = "extra tags."
