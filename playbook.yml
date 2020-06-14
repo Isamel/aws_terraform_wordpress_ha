@@ -12,8 +12,10 @@
           - unzip
           - httpd
           - php 
-          - php-mysql 
-          - php-gd
+          - php-mysqlnd 
+          - php-pdo 
+          - php-gd 
+          - php-mbstring
 
           tmp_dir: '/home/{{ system_user }}'
           wordpress_url: 'http://wordpress.org/latest.tar.gz'
